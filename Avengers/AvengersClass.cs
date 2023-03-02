@@ -155,9 +155,11 @@ namespace AntMe.Player.Avengers
         /// <param name="marker">marker</param>
         public override void DetectedScentFriend(Marker marker)
         {
-            Console.WriteLine("marker values: ", marker);
-            Think("found marker");
-            Stop();
+            // Detecting the marker made on territory by another friendly ant about an enemy
+            Think("Found marker for enemy!!");
+
+            // Turning around by 180 degree from the last known location of the enemy
+            TurnAround();
         }
 
         /// <summary>
@@ -206,16 +208,29 @@ namespace AntMe.Player.Avengers
         public override void SpotsEnemy(Bug bug)
         {
             Drop();
-            if (FriendlyAntsInViewrange >= 2)
+            // Tutorial says more than 2, but energy or ants which takes to kill a bug is 10 times, 
+            // So there is no point fighting the bug with 2 more bugs, so increasing value to 7
+            // In hopes to give more of a fighting change, so in hope to find more ants in view range before the fight ends
+
+            if (FriendlyAntsInViewrange >= 7)
             {
                 Attack(bug);
             }
             else
             {
-                // GoAwayFrom(bug);
-                Think("Ants!!! Assemble.");
+                // GoAwayFrom(bug); -- Default tutoring code
+                
+                // Will display a pop up box with given text for users along with it we will make the other ants realise this location
+                Think("Ants!!! Beware of Enemy!!!");
+
+                // Will mark the territory for friendly ants to avoid the bug
                 MakeMark(1);
-                Stop();
+
+                // Turn 90 degrees clock wise from that location
+                TurnByDegrees(90);
+
+                // No Go away from the bug spotted
+                GoAwayFrom(bug);
             }
         }
 
